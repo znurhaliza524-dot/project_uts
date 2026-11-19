@@ -40,8 +40,14 @@ class DashboardController extends Controller
         $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $kunjunganBulanan = array_fill(0, 12, 0);
 
+        // Gunakan strftime untuk kompatibilitas MySQL & SQLite
+        $isMySQL = config('database.default') === 'mysql';
+        $monthExpr = $isMySQL
+            ? 'MONTH(tgl_kunjungan) as bulan'
+            : "CAST(strftime('%m', tgl_kunjungan) AS INTEGER) as bulan";
+
         $visits = BeritaAcara::whereYear('tgl_kunjungan', $currentYear)
-            ->selectRaw('MONTH(tgl_kunjungan) as bulan, COUNT(*) as total')
+            ->selectRaw("{$monthExpr}, COUNT(*) as total")
             ->groupBy('bulan')
             ->pluck('total', 'bulan');
 
