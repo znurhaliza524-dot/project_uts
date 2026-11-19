@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagram & Dokumentasi Sistem — Perpustakaan Keliling Lampung Timur</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Mermaid JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Print Styles: Menampilkan seluruh 7 diagram secara rapi per halaman dalam PDF */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 8mm 10mm;
+            }
+            body {
+                background-color: #0f172a !important;
+                color: #f8fafc !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            header, #tab-nav-bar, .no-print, footer {
+                display: none !important;
+            }
+            .max-w-7xl {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .tab-content {
+                display: block !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .tab-content:last-of-type {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            .tab-content > div {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                border: 1px solid #334155 !important;
+                padding: 1rem !important;
+                margin: 0 !important;
+            }
+            .mermaid {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                padding: 0.5rem 0 !important;
+            }
+            .mermaid svg {
+                max-height: 450px !important;
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar Header -->
+    <header class="no-print border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-diagram-project text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+                        Diagram & Dokumentasi Sistem
+                        <span
+                            class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">Laravel
+                            13 + 3NF</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Sistem Informasi Pengolahan Data Anggota Perpustakaan Keliling —
+                        Dispusip Lampung Timur</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="window.print()"
+                    class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                </button>
+                <a href="http://127.0.0.1:8000" target="_blank"
+                    class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-600/30">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Aplikasi
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex-1 flex flex-col gap-6">
+
+        <!-- Navigation Tabs Bar -->
+        <div id="tab-nav-bar"
+            class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-2 flex flex-wrap gap-1.5 shadow-xl sticky top-20 z-20 backdrop-blur">
+            <button onclick="switchTab('usecase')" id="tab-btn-usecase"
+                class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm">
+                <i class="fa-solid fa-users-gear"></i> 1. Use Case Diagram
+            </button>
+            <button onclick="switchTab('flowchart-general')" id="tab-btn-flowchart-general"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-sitemap"></i> 2. Flowchart Sistem
+            </button>
+            <button onclick="switchTab('flowchart-kunjungan')" id="tab-btn-flowchart-kunjungan"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-truck-ramp-box"></i> 3. Flowchart Berita Acara
+            </button>
+            <button onclick="switchTab('dfd')" id="tab-btn-dfd"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-network-wired"></i> 4. DFD (Konteks & Lvl 1)
+            </button>
+            <button onclick="switchTab('activity')" id="tab-btn-activity"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-person-walking-arrow-right"></i> 5. Activity Diagram
+            </button>
+            <button onclick="switchTab('sequence')" id="tab-btn-sequence"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrows-split-up-and-left"></i> 6. Sequence Diagram
+            </button>
+            <button onclick="switchTab('erd')" id="tab-btn-erd"
+                class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-database"></i> 7. ERD (3NF Relasi)
+            </button>
+        </div>
+
+        <!-- TAB CONTENT 1: USE CASE DIAGRAM -->
+        <div id="tab-usecase" class="tab-content block space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div
+                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Diagram Aktor & Hak
+                            Akses</span>
+                        <h2 class="text-xl font-bold text-white mt-1">1. Use Case Diagram (Role-Based Access Control)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Menggambarkan interaksi antara dua aktor utama:
+                            <strong>Administrator (Zahra Nurhaliza)</strong> dan <strong>Petugas Pustakawan (Dedi
+                                Irawan, S.Kom., M.T.I)</strong> dengan batasan wewenang sistem.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span
+                            class="px-3 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Admin: Hak Penuh
+                        </span>
+                        <span
+                            class="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-medium">
+                            <i class="fa-solid fa-clipboard-user mr-1"></i> Petugas: Operasional Lapangan
+                        </span>
+                    </div>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+flowchart LR
+    Admin["Administrator<br/>(Zahra Nurhaliza)"]
+    Petugas["Petugas Lapangan<br/>(Dedi Irawan, S.Kom., M.T.I)"]
+
+    subgraph System ["Sistem Informasi Perpustakaan Keliling Dispusip Lampung Timur"]
+        direction TB
+
+        UC_Login(["UC-01: Autentikasi Login & Logout"]):::common
+        UC_Profile(["UC-02: Kelola Profil & Ganti Password"]):::common
+
+        UC_Sekolah_CRUD(["UC-03: Kelola Master Sekolah - CRUD"]):::adminOnly
+        UC_Sekolah_View(["UC-04: Lihat & Pencarian Sekolah AJAX"]):::common
+        UC_Pustakawan_CRUD(["UC-05: Kelola Master Pustakawan - CRUD"]):::adminOnly
+
+        UC_Anggota_CRUD(["UC-06: Kelola Data Anggota Siswa - CRUD"]):::common
+        UC_Anggota_Search(["UC-07: Live Search Anggota AJAX"]):::common
+        UC_Kartu_Single(["UC-08: Cetak Kartu Anggota Ukuran KTP"]):::common
+        UC_Kartu_Massal(["UC-09: Cetak Massal Kartu Modal Popup"]):::common
+
+        UC_BA_CRUD(["UC-10: Input Berita Acara Kunjungan Armada"]):::common
+        UC_BA_Presensi(["UC-11: Presensi Siswa Dinamis per Sekolah"]):::common
+        UC_BA_Cetak(["UC-12: Cetak Dokumen Resmi Berita Acara"]):::common
+
+        UC_Lap_Anggota(["UC-13: Cetak Laporan Tahunan Anggota"]):::common
+        UC_Lap_Kunjungan(["UC-14: Cetak Laporan Tahunan Kunjungan"]):::common
+        UC_Export_CSV(["UC-15: Ekspor Data ke Format CSV"]):::common
+    end
+
+    Admin --> UC_Login
+    Admin --> UC_Profile
+    Admin --> UC_Sekolah_CRUD
+    Admin --> UC_Pustakawan_CRUD
+    Admin --> UC_Anggota_CRUD
+    Admin --> UC_Kartu_Massal
+    Admin --> UC_BA_CRUD
+    Admin --> UC_Lap_Anggota
+    Admin --> UC_Lap_Kunjungan
+    Admin --> UC_Export_CSV
+
+    Petugas --> UC_Login
+    Petugas --> UC_Profile
+    Petugas --> UC_Sekolah_View
+    Petugas --> UC_Anggota_CRUD
+    Petugas --> UC_Kartu_Massal
+    Petugas --> UC_BA_CRUD
+    Petugas --> UC_Lap_Anggota
+    Petugas --> UC_Lap_Kunjungan
+    Petugas --> UC_Export_CSV
+
+    UC_Anggota_CRUD -.->|"include"| UC_Anggota_Search
+    UC_Anggota_CRUD -.->|"extend"| UC_Kartu_Single
+    UC_Anggota_CRUD -.->|"extend"| UC_Kartu_Massal
+    UC_BA_CRUD -.->|"include"| UC_BA_Presensi
+    UC_BA_CRUD -.->|"extend"| UC_BA_Cetak
+
+    classDef common fill:#1e293b,stroke:#6366f1,stroke-width:1.5px,color:#f8fafc;
+    classDef adminOnly fill:#312e81,stroke:#a855f7,stroke-width:2px,color:#fdf4ff;
+                    </pre>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300 mt-4">
+                    <div class="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                        <h4 class="font-bold text-white flex items-center gap-1.5 mb-2 text-indigo-400">
+                            <i class="fa-solid fa-key"></i> Hak Istimewa Administrator
+                        </h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-400">
+                            <li>Memiliki kendali penuh untuk menambah, mengubah, dan menghapus master Sekolah.</li>
+                            <li>Satu-satunya role yang memiliki hak akses menu Master Data Pustakawan (NIP, Jabatan).
+                            </li>
+                            <li>Dapat memantau dan mencetak seluruh rekapitulasi data anggota dan kunjungan.</li>
+                        </ul>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                        <h4 class="font-bold text-white flex items-center gap-1.5 mb-2 text-emerald-400">
+                            <i class="fa-solid fa-van-shuttle"></i> Hak Operasional Petugas
+                        </h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-400">
+                            <li>Akses melihat & mencari data sekolah (Read-Only; tidak dapat edit/hapus).</li>
+                            <li>Dapat melakukan registrasi anggota siswa baru serta mencetak kartu identitas siswa.</li>
+                            <li>Membuat Berita Acara kunjungan armada perpustakaan keliling dan mengisi daftar hadir
+                                siswa.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 2: FLOWCHART SISTEM KESELURUHAN -->
+        <div id="tab-flowchart-general" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Alur Logika &
+                        Keputusan</span>
+                    <h2 class="text-xl font-bold text-white mt-1">2. Flowchart Sistem Keseluruhan</h2>
+                    <p class="text-xs text-slate-400 mt-1">Alur mulai dari autentikasi pengguna, pembagian peran RBAC
+                        (Admin vs Petugas), navigasi menu utama, hingga pengolahan data dan pelaporan.</p>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+flowchart TD
+    Start(["Mulai"]) --> HalLogin[/"Halaman Login"/]
+    HalLogin --> InputAuth["Input Username & Password"]
+    InputAuth --> CekAuth{"Validasi Kredensial?"}
+    
+    CekAuth -->|"Tidak Valid"| ErrAuth["Tampilkan Pesan Error:<br/>Username atau Password Salah"]
+    ErrAuth --> HalLogin
+    
+    CekAuth -->|"Valid"| SetSession["Inisialisasi Sesi Pengguna & Auth Guard"]
+    SetSession --> CekRole{"Periksa Role Pengguna"}
+    
+    %% Admin Branch
+    CekRole -->|"Admin (Zahra)"| DashAdmin["Tampilkan Dashboard Admin<br/>• Ringkasan KPI Lengkap<br/>• Seluruh Menu Aktif"]
+    
+    %% Petugas Branch
+    CekRole -->|"Petugas (Dedi)"| DashPetugas["Tampilkan Dashboard Petugas<br/>• Menu Pustakawan Disembunyikan<br/>• Aksi Sekolah Dibatasi Read-Only"]
+
+    DashAdmin --> PilihMenu{"Pilih Menu Operasional"}
+    DashPetugas --> PilihMenu
+
+    PilihMenu -->|"Master Sekolah"| ProcSekolah["Kelola Data Sekolah Mitra<br/>Live Search AJAX"]
+    PilihMenu -->|"Master Pustakawan"| CekPustakawan{"Role == Admin?"}
+    CekPustakawan -->|"Ya"| ProcPustakawan["Kelola Data Pustakawan"]
+    CekPustakawan -->|"Tidak"| Abort403["Akses Ditolak:<br/>HTTP 403 Forbidden"]
+    
+    PilihMenu -->|"Anggota Siswa"| ProcAnggota["Kelola Data Siswa & Kelas"]
+    ProcAnggota --> SubCetakKartu{"Aksi Cetak?"}
+    SubCetakKartu -->|"Kartu Tunggal"| CetakKTP["Tampilkan Kartu Standar KTP<br/>(85.6mm x 54mm)"]
+    SubCetakKartu -->|"Cetak Massal"| PopupModal["Buka Modal Popup Accordion<br/>Pilih Siswa & Pratinjau"]
+
+    PilihMenu -->|"Berita Acara"| ProcBA["Input Kunjungan Mobil Keliling<br/>Presensi Hadir Siswa<br/>Cetak BA Kop Resmi Pemda"]
+
+    PilihMenu -->|"Laporan"| ProcLap["Filter Tahun & Sekolah<br/>Ekspor CSV / Cetak Browser"]
+
+    PilihMenu -->|"Logout"| ClearSession["Hapus Sesi Autentikasi"]
+    ClearSession --> HalLogin
+    ClearSession --> Selesai(["Selesai"])
+
+    classDef default fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f8fafc;
+    classDef decision fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef startEnd fill:#0f766e,stroke:#14b8a6,stroke-width:2px,color:#ffffff;
+    class Start,Selesai startEnd;
+    class CekAuth,CekRole,PilihMenu,CekPustakawan,SubCetakKartu decision;
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 3: FLOWCHART BERITA ACARA & PRESENSI -->
+        <div id="tab-flowchart-kunjungan" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Proses Bisnis Utama
+                        Lapangan</span>
+                    <h2 class="text-xl font-bold text-white mt-1">3. Flowchart Proses Kunjungan & Berita Acara</h2>
+                    <p class="text-xs text-slate-400 mt-1">Menggambarkan alur kerja saat armada perpustakaan keliling
+                        mengunjungi sekolah mitra hingga terbitnya Berita Acara resmi berkop surat kedinasan.</p>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+flowchart TD
+    StartBA(["Mulai Kunjungan"]) --> FormBA["Buka Form Tambah Berita Acara"]
+    FormBA --> InputHeader["Pilih Tanggal Kunjungan & Petugas Pustakawan"]
+    InputHeader --> PilihSekolah["Pilih Sekolah Tujuan dari Dropdown"]
+    
+    PilihSekolah --> AjaxFetch["Request AJAX: Ambil Daftar Anggota Terdaftar di Sekolah Terpilih"]
+    AjaxFetch --> RenderList["Tampilkan Daftar Anggota dengan Checkbox Kehadiran"]
+    
+    RenderList --> ChecklistSiswa["Centang Siswa yang Hadir Membaca / Input Keterangan"]
+    ChecklistSiswa --> SubmitBA["Klik Tombol Simpan Berita Acara"]
+    
+    SubmitBA --> ValDB{"Validasi Data Header & Presensi?"}
+    ValDB -->|"Data Belum Lengkap"| ShowErr["Tampilkan Validasi Error di Form"]
+    ShowErr --> FormBA
+
+    ValDB -->|"Valid"| SaveDB[("Simpan ke Tabel 'berita_acara'<br/>& 'detail_kunjungan'")]
+    SaveDB --> ShowDetail["Tampilkan Halaman Rincian Berita Acara"]
+    
+    ShowDetail --> ActionCetak{"Cetak Berita Acara Resmi?"}
+    ActionCetak -->|"Ya"| GeneratePDF["Generate Format Cetak Resmi:<br/>• Kop Dinas Perpustakaan & Kearsipan<br/>• Rincian Sekolah & Pustakawan<br/>• Tabel Presensi Siswa Hadir<br/>• Lembar Tanda Tangan Kepsek & Petugas"]
+    GeneratePDF --> PrintPreview["Pratinjau / Print Dialog Browser"]
+    PrintPreview --> EndBA(["Selesai"])
+
+    ActionCetak -->|"Tidak"| EndBA
+
+    classDef default fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f8fafc;
+    classDef decision fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef startEnd fill:#0f766e,stroke:#14b8a6,stroke-width:2px,color:#ffffff;
+    class StartBA,EndBA startEnd;
+    class ValDB,ActionCetak decision;
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 4: DFD (DATA FLOW DIAGRAM) -->
+        <div id="tab-dfd" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Aliran Data Sistem</span>
+                    <h2 class="text-xl font-bold text-white mt-1">4. Data Flow Diagram (DFD)</h2>
+                    <p class="text-xs text-slate-400 mt-1">Mengadopsi pemodelan fungsional sesuai Tugas Akhir D-III
+                        Putri Damayanti (2019) yang diimplementasikan ke dalam sistem Laravel.</p>
+                </div>
+
+                <!-- DFD LEVEL 0 / CONTEXT DIAGRAM -->
+                <div class="space-y-2 mt-4">
+                    <h3 class="text-sm font-bold text-indigo-300 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-dot text-xs"></i> 4.1 Diagram Konteks (DFD Level 0)
+                    </h3>
+                    <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                        <pre class="mermaid">
+flowchart LR
+    Admin["Entitas Luar:<br/>ADMINISTRATOR<br/>(Zahra Nurhaliza)"]
+    Petugas["Entitas Luar:<br/>PETUGAS PUSTAKAWAN<br/>(Dedi Irawan)"]
+    SekolahPihak["Entitas Luar:<br/>SEKOLAH MITRA<br/>(Kepala Sekolah / Siswa)"]
+    Pimpinan["Entitas Luar:<br/>KEPALA DINAS<br/>(Pimpinan Dispusip)"]
+
+    System(["0.0 Sistem Informasi<br/>Pengolahan Data<br/>Anggota Perpustakaan<br/>Keliling"])
+
+    Admin -->|"Data Akun, Master Sekolah, Data Pustakawan"| System
+    System -->|"Info Status Master, Log Aktivitas"| Admin
+
+    Petugas -->|"Data Siswa Baru, Presensi Kunjungan Armada"| System
+    System -->|"Kartu Anggota KTP, Form Presensi Otomatis"| Petugas
+
+    SekolahPihak -->|"Daftar Siswa Calon Anggota"| Petugas
+    System -->|"Berita Acara Kunjungan Fisik Berkop"| SekolahPihak
+
+    System -->|"Laporan Tahunan Anggota & Rekap Kunjungan Armada"| Pimpinan
+
+    classDef entitas fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef proc fill:#312e81,stroke:#6366f1,stroke-width:2.5px,color:#ffffff;
+    class Admin,Petugas,SekolahPihak,Pimpinan entitas;
+    class System proc;
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- DFD LEVEL 1 -->
+                <div class="space-y-2 mt-8">
+                    <h3 class="text-sm font-bold text-indigo-300 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-dot text-xs"></i> 4.2 DFD Level 1 (Dekomposisi Fungsional)
+                    </h3>
+                    <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                        <pre class="mermaid">
+flowchart TD
+    User(["Pengguna: Admin / Petugas"])
+
+    P1(("1.0<br/>Manajemen<br/>Autentikasi"))
+    P2(("2.0<br/>Pengelolaan<br/>Master Sekolah<br/>& Pustakawan"))
+    P3(("3.0<br/>Registrasi &<br/>Cetak Kartu<br/>Anggota"))
+    P4(("4.0<br/>Pengolahan<br/>Berita Acara &<br/>Presensi Kunjungan"))
+    P5(("5.0<br/>Generasi Laporan<br/>Tahunan & Ekspor"))
+
+    DB_Users[("tb_users")]
+    DB_Sekolah[("tb_sekolah")]
+    DB_Pustakawan[("tb_pustakawan")]
+    DB_Anggota[("tb_anggota")]
+    DB_BA[("tb_berita_acara")]
+    DB_Detail[("tb_detail_kunjungan")]
+
+    User -->|"Username & Password"| P1
+    P1 <-->|"Validasi Role"| DB_Users
+
+    User -->|"Input Data Sekolah & Pustakawan"| P2
+    P2 <-->|"CRUD Sekolah"| DB_Sekolah
+    P2 <-->|"CRUD Pustakawan"| DB_Pustakawan
+
+    User -->|"Input Anggota Siswa"| P3
+    P3 <-->|"Lookup ID Sekolah"| DB_Sekolah
+    P3 <-->|"Simpan/Ambil Anggota"| DB_Anggota
+    P3 -->|"Cetak Kartu KTP & Batch Modal"| User
+
+    User -->|"Input BA & Cek Kehadiran"| P4
+    P4 <-->|"Pilih Sekolah & Pustakawan"| DB_Sekolah
+    P4 <-->|"Pilih Pustakawan"| DB_Pustakawan
+    P4 <-->|"Load Siswa Hadir"| DB_Anggota
+    P4 -->|"Simpan BA Header"| DB_BA
+    P4 -->|"Simpan Presensi"| DB_Detail
+    P4 -->|"Cetak Berita Acara Resmi"| User
+
+    User -->|"Filter Tahun & Sekolah"| P5
+    DB_Anggota -.-> P5
+    DB_BA -.-> P5
+    DB_Detail -.-> P5
+    P5 -->|"File CSV / Print Laporan"| User
+
+    classDef default fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f8fafc;
+    classDef proc fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#ffffff;
+    classDef dbs fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#e0f2fe;
+    class P1,P2,P3,P4,P5 proc;
+    class DB_Users,DB_Sekolah,DB_Pustakawan,DB_Anggota,DB_BA,DB_Detail dbs;
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 5: ACTIVITY DIAGRAM -->
+        <div id="tab-activity" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Alur Interaksi
+                        Swimlane</span>
+                    <h2 class="text-xl font-bold text-white mt-1">5. Activity Diagram: Pelayanan Kunjungan Lapangan</h2>
+                    <p class="text-xs text-slate-400 mt-1">Menggambarkan pembagian aktivitas antara Petugas Lapangan,
+                        Sistem Antarmuka Web, dan Basis Data MySQL dalam satu sesi pelayanan.</p>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+flowchart TD
+    subgraph Petugas ["Petugas Pustakawan (Dedi Irawan)"]
+        A1(["Mulai Layanan"]) --> A2["Buka Menu Tambah Berita Acara"]
+        A2 --> A3["Pilih Sekolah Tujuan"]
+        A5["Pilih Daftar Siswa yang Datang Membaca"] --> A6["Klik Simpan Berita Acara"]
+        A8["Klik Cetak Berita Acara Resmi"] --> A9["Bawa Dokumen ke Kepala Sekolah<br/>untuk Ditandatangani & Distempel"]
+        A9 --> A10(["Selesai Layanan"])
+    end
+
+    subgraph Browser ["Web Browser / Aplikasi Laravel"]
+        A3 --> B1["Kirim Event AJAX 'change' dengan ID Sekolah"]
+        B3["Render Checkbox Siswa beserta Kelas & NISN"] --> A5
+        A6 --> B4["Kirim HTTP POST Request ke BeritaAcaraController@store"]
+        B6["Redirect ke Halaman Detail Kunjungan<br/>Notifikasi Sukses Ditampilkan"] --> A8
+        A8 --> B7["Buka Halaman Cetak dengan Kop Resmi Kedinasan"]
+        B7 --> B8["Trigger window.print Dialog Browser"]
+    end
+
+    subgraph ServerDB ["Database MySQL (3NF)"]
+        B1 --> C1[("Query Anggota Berdasarkan id_sekolah")]
+        C1 --> B3
+        B4 --> C2{"Validasi Input Form"}
+        C2 -->|"Valid"| C3[("INSERT INTO berita_acara")]
+        C3 --> C4[("INSERT BULK INTO detail_kunjungan")]
+        C4 --> B6
+    end
+
+    classDef default fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f8fafc;
+    classDef decision fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef startEnd fill:#0f766e,stroke:#14b8a6,stroke-width:2px,color:#ffffff;
+    class A1,A10 startEnd;
+    class C2 decision;
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 6: SEQUENCE DIAGRAM -->
+        <div id="tab-sequence" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Urutan Pesan &
+                        Waktu</span>
+                    <h2 class="text-xl font-bold text-white mt-1">6. Sequence Diagram: Cetak Massal Kartu Anggota (Modal
+                        Popup)</h2>
+                    <p class="text-xs text-slate-400 mt-1">Interaksi dinamis AJAX saat pengguna membuka fitur cetak
+                        kartu anggota massal berstandar ukuran KTP tanpa berpindah halaman.</p>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Pengguna as Pengguna (Petugas/Admin)
+    participant View as Anggota Index View
+    participant Controller as AnggotaController
+    participant Model as Model Anggota / Sekolah
+    participant DB as MySQL Database
+
+    Pengguna->>View: Buka Data Anggota Siswa
+    Pengguna->>View: Klik "Cetak Massal Kartu"
+    activate View
+    View->>View: Tampilkan Loading Spinner pada Modal
+
+    View->>Controller: GET /anggota/cetak-massal (Header: X-Requested-With XMLHttpRequest)
+    activate Controller
+    Controller->>Model: Anggota::with('sekolah')->orderBy('nama_anggota')->get()
+    activate Model
+    Model->>DB: SELECT * FROM anggota JOIN sekolah ...
+    DB-->>Model: Return Recordset Siswa & Sekolah
+    Model-->>Controller: Collection Objek Anggota
+    deactivate Model
+
+    Controller-->>View: Return Partial HTML View (_modal_kartu_massal.blade.php)
+    deactivate Controller
+
+    View->>View: Inject Partial HTML ke dalam Container Modal
+    View-->>Pengguna: Muncul Modal Popup Daftar Nama & NISN (Accordion Mode)
+    deactivate View
+
+    Pengguna->>View: Klik Salah Satu Nama Siswa
+    View->>View: Expand Accordion -> Render Kartu Standar KTP (85.6mm x 54mm)
+    
+    Pengguna->>View: Centang Pilihan Siswa & Klik "Cetak Sekarang (Print / PDF)"
+    View->>Pengguna: Buka Print Dialog Browser (CSS @media print mengatur 2 kolom KTP rapi)
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 7: ERD (ENTITY RELATIONSHIP DIAGRAM 3NF) -->
+        <div id="tab-erd" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="pb-4 border-b border-slate-800">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Struktur Data Relasional
+                        (3NF)</span>
+                    <h2 class="text-xl font-bold text-white mt-1">7. Entity Relationship Diagram (ERD)</h2>
+                    <p class="text-xs text-slate-400 mt-1">Struktur 6 tabel dalam database
+                        <code>db_perpustakaan_keliling</code> dengan konvensi primary key <code>id_namatabel</code> dan
+                        integritas foreign key referensial.
+                    </p>
+                </div>
+
+                <div class="py-6 overflow-x-auto bg-slate-950/60 rounded-xl p-4 my-4 border border-slate-800/80">
+                    <pre class="mermaid">
+erDiagram
+    SEKOLAH ||--o{ ANGGOTA : "memiliki siswa"
+    SEKOLAH ||--o{ BERITA_ACARA : "menerima kunjungan"
+    PUSTAKAWAN ||--o{ BERITA_ACARA : "ditugaskan ke"
+    BERITA_ACARA ||--|{ DETAIL_KUNJUNGAN : "memuat daftar hadir"
+    ANGGOTA ||--o{ DETAIL_KUNJUNGAN : "tercatat hadir di"
+    PUSTAKAWAN ||--o| USERS : "opsional tertaut akun"
+
+    SEKOLAH {
+        int id_sekolah PK
+        string nama_sekolah
+        text alamat
+        string kecamatan
+        string nama_kepsek
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    PUSTAKAWAN {
+        int id_pustakawan PK
+        string nama
+        string nip
+        string jabatan
+        string no_telp
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USERS {
+        int id PK
+        string username
+        string password
+        string nama_lengkap
+        string role "admin atau pustakawan"
+        int id_pustakawan FK "Nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ANGGOTA {
+        int id_anggota PK
+        string nomor_anggota "Unique"
+        string nisn "Unique"
+        string nama_anggota
+        string kelas
+        string jenis_kelamin "L atau P"
+        int id_sekolah FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    BERITA_ACARA {
+        int id_ba PK
+        string nomor_ba "Unique"
+        date tgl_kunjungan
+        int id_sekolah FK
+        int id_pustakawan FK
+        text keterangan
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    DETAIL_KUNJUNGAN {
+        int id_detail PK
+        int id_ba FK
+        int id_anggota FK
+        boolean hadir
+        timestamp created_at
+        timestamp updated_at
+    }
+                    </pre>
+                </div>
+
+                <!-- Database Metadata Summary Table -->
+                <div class="overflow-x-auto mt-6">
+                    <table class="w-full text-xs text-left border border-slate-800 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-800 text-slate-300 font-bold uppercase tracking-wider text-[11px]">
+                            <tr>
+                                <th class="p-3">Nama Tabel</th>
+                                <th class="p-3">Primary Key</th>
+                                <th class="p-3">Foreign Key Relasi</th>
+                                <th class="p-3">Deskripsi & Peran Fungsional</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/80 bg-slate-900/50 text-slate-300">
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">sekolah</td>
+                                <td class="p-3 font-mono text-emerald-400">id_sekolah</td>
+                                <td class="p-3 text-slate-500">-</td>
+                                <td class="p-3">Master data sekolah mitra layanan armada di wilayah Kab. Lampung Timur.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">pustakawan</td>
+                                <td class="p-3 font-mono text-emerald-400">id_pustakawan</td>
+                                <td class="p-3 text-slate-500">-</td>
+                                <td class="p-3">Data petugas perpustakaan keliling (NIP, Jabatan, Kontak). Khusus
+                                    dikelola Admin.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">users</td>
+                                <td class="p-3 font-mono text-emerald-400">id</td>
+                                <td class="p-3 font-mono text-amber-400">id_pustakawan (opsional)</td>
+                                <td class="p-3">Kredensial login akun sistem dengan RBAC (Role: admin / pustakawan).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">anggota</td>
+                                <td class="p-3 font-mono text-emerald-400">id_anggota</td>
+                                <td class="p-3 font-mono text-amber-400">id_sekolah</td>
+                                <td class="p-3">Data siswa anggota perpustakaan, NISN unik, dan data cetak kartu
+                                    berukuran standar KTP.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">berita_acara</td>
+                                <td class="p-3 font-mono text-emerald-400">id_ba</td>
+                                <td class="p-3 font-mono text-amber-400">id_sekolah, id_pustakawan</td>
+                                <td class="p-3">Catatan arsip resmi kunjungan armada mobil keliling ke sekolah.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">detail_kunjungan</td>
+                                <td class="p-3 font-mono text-emerald-400">id_detail</td>
+                                <td class="p-3 font-mono text-amber-400">id_ba, id_anggota</td>
+                                <td class="p-3">Tabel penghubung presensi kehadiran setiap anggota siswa pada berita
+                                    acara terkait.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/50 py-4 px-6 text-center text-xs text-slate-500">
+        <p>Sistem Informasi Pengolahan Data Anggota Perpustakaan Keliling &bull; Dispusip Lampung Timur &bull; Project
+            UTS Basis Data Lanjut</p>
+    </footer>
+
+    <!-- Tab Switching Script -->
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0f172a',
+                primaryColor: '#6366f1',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#818cf8',
+                lineColor: '#94a3b8',
+                secondaryColor: '#312e81',
+                tertiaryColor: '#1e293b'
+            },
+            flowchart: { curve: 'basis', htmlLabels: true, useMaxWidth: true },
+            sequence: { useMaxWidth: true }
+        });
+
+        // Render ALL diagrams on load (including hidden tabs)
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Temporarily make all hidden tabs visible for rendering
+            const hiddenTabs = document.querySelectorAll('.tab-content.hidden');
+            hiddenTabs.forEach(el => {
+                el.style.position = 'absolute';
+                el.style.visibility = 'hidden';
+                el.style.display = 'block';
+            });
+
+            await mermaid.run();
+
+            // Restore hidden state
+            hiddenTabs.forEach(el => {
+                el.style.position = '';
+                el.style.visibility = '';
+                el.style.display = '';
+            });
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm', 'active');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+            });
+
+            const activeContent = document.getElementById('tab-' + tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm', 'active');
+                activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+            }
+        }
+    </script>
+</body>
+
+</html>

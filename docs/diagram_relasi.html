@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Relasi Basis Data 3NF (Disempurnakan)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --border-color: #334155;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .table-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .table-box:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 15px 25px -5px rgba(56, 189, 248, 0.25);
+    }
+
+    .highlighted {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3) !important;
+    }
+  </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+  <!-- Header Bar -->
+  <div
+    class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-5">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span
+          class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          Standar 3NF Sempurna
+        </span>
+        <span class="text-xs text-sky-400 font-semibold">🔒 Bebas Celah Integritas & Indexing Ready</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+        Rancangan Relasi Basis Data (ERD) Disempurnakan
+      </h1>
+      <p class="text-sm text-slate-400">
+        Perpustakaan Keliling — Dinas Perpustakaan & Kearsipan Lampung Timur
+      </p>
+    </div>
+
+    <!-- Navigation Pills -->
+    <div class="flex items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs">
+      <button onclick="switchTab('diagram')" id="btn-diagram"
+        class="px-3 py-1.5 rounded-lg font-medium transition bg-sky-500 text-white shadow">
+        🗺️ Diagram Visual
+      </button>
+      <button onclick="switchTab('audit')" id="btn-audit"
+        class="px-3 py-1.5 rounded-lg font-medium transition text-slate-300 hover:text-white">
+        🔍 5 Kekurangan yang Diperbaiki
+      </button>
+      <button onclick="switchTab('sql')" id="btn-sql"
+        class="px-3 py-1.5 rounded-lg font-medium transition text-slate-300 hover:text-white">
+        💻 DDL SQL Terbaru
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 1: DIAGRAM RELASI -->
+  <div id="tab-diagram" class="max-w-7xl mx-auto">
+    <!-- Petunjuk Interaktif -->
+    <div
+      class="mb-4 bg-sky-950/40 border border-sky-800/50 rounded-xl p-3 text-xs text-sky-200 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base">👆</span>
+        <span><b>Tips:</b> Klik kartu tabel untuk menyorot detail kolom, kunci PK/FK, serta indeks pencarian.</span>
+      </div>
+      <div class="flex items-center gap-2 font-mono text-[11px]">
+        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">PK</span>
+        <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40 font-bold">FK</span>
+        <span
+          class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">UNIQUE</span>
+        <span
+          class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold">INDEX</span>
+      </div>
+    </div>
+
+    <!-- Container Grid Tabel -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative" id="cards-container">
+
+      <!-- 1. SEKOLAH -->
+      <div class="table-box p-0 cursor-pointer" id="t-sekolah" onclick="focusTable('sekolah')">
+        <div
+          class="bg-indigo-600/30 border-b border-indigo-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🏫</span>
+            <span class="font-mono font-bold text-indigo-300 text-sm">sekolah</span>
+          </div>
+          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded font-mono">Master</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_sekolah</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-emerald-300">
+            <span>npsn</span>
+            <span class="text-slate-400">VARCHAR(20) UK</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-indigo-200">
+            <span>nama_sekolah ⚡</span>
+            <span class="text-slate-400">VARCHAR(100) IDX</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>nama_kepsek</span>
+            <span class="text-slate-400">VARCHAR(100)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>kecamatan</span>
+            <span class="text-slate-400">VARCHAR(50)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>alamat</span>
+            <span class="text-slate-400">TEXT</span>
+          </div>
+        </div>
+        <div
+          class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl flex flex-col gap-1">
+          <span>🔗 <b>1:N</b> ke <span class="text-emerald-400 font-mono font-semibold">anggota.id_sekolah</span></span>
+          <span>🔗 <b>1:N</b> ke <span
+              class="text-sky-400 font-mono font-semibold">berita_acara.id_sekolah</span></span>
+        </div>
+      </div>
+
+      <!-- 2. PUSTAKAWAN -->
+      <div class="table-box p-0 cursor-pointer" id="t-pustakawan" onclick="focusTable('pustakawan')">
+        <div
+          class="bg-teal-600/30 border-b border-teal-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🧑‍💼</span>
+            <span class="font-mono font-bold text-teal-300 text-sm">pustakawan</span>
+          </div>
+          <span class="text-[10px] bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-mono">Master</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_pustakawan</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-emerald-300">
+            <span>nip</span>
+            <span class="text-slate-400">VARCHAR(30) UK</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-teal-200">
+            <span>nama ⚡</span>
+            <span class="text-slate-400">VARCHAR(100) IDX</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>jabatan</span>
+            <span class="text-slate-400">VARCHAR(50)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>no_telp</span>
+            <span class="text-slate-400">VARCHAR(20)</span>
+          </div>
+        </div>
+        <div
+          class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl flex flex-col gap-1">
+          <span>🔗 <b>1:1</b> ke <span class="text-purple-400 font-mono font-semibold">users.id_pustakawan</span></span>
+          <span>🔗 <b>1:N</b> ke <span
+              class="text-sky-400 font-mono font-semibold">berita_acara.id_pustakawan</span></span>
+        </div>
+      </div>
+
+      <!-- 3. USERS -->
+      <div class="table-box p-0 cursor-pointer" id="t-users" onclick="focusTable('users')">
+        <div
+          class="bg-purple-600/30 border-b border-purple-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🔐</span>
+            <span class="font-mono font-bold text-purple-300 text-sm">users</span>
+          </div>
+          <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-mono">Auth</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_user</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_pustakawan</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK, UK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-emerald-300">
+            <span>username</span>
+            <span class="text-slate-400">VARCHAR(50) UK</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>password</span>
+            <span class="text-slate-400">VARCHAR(255) Hash</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>role</span>
+            <span class="text-slate-400">ENUM(adm,pust)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>status_aktif</span>
+            <span class="text-slate-400">BOOLEAN</span>
+          </div>
+        </div>
+        <div class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl">
+          <span>🔗 Merujuk ke <span class="text-teal-400 font-mono font-semibold">pustakawan.id_pustakawan</span></span>
+        </div>
+      </div>
+
+      <!-- 4. ANGGOTA -->
+      <div class="table-box p-0 cursor-pointer" id="t-anggota" onclick="focusTable('anggota')">
+        <div
+          class="bg-emerald-600/30 border-b border-emerald-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🎒</span>
+            <span class="font-mono font-bold text-emerald-300 text-sm">anggota</span>
+          </div>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono">Master Siswa</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_anggota</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_sekolah ⚡</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK, IDX)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-emerald-300 font-semibold">
+            <span>nomor_anggota</span>
+            <span class="text-slate-400">VARCHAR(30) UK</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>nama ⚡</span>
+            <span class="text-slate-400">VARCHAR(100) IDX</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>jenis_kelamin</span>
+            <span class="text-slate-400">ENUM('L','P')</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>kelas</span>
+            <span class="text-slate-400">VARCHAR(20)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>status_anggota</span>
+            <span class="text-slate-400">ENUM(aktif,lulus)</span>
+          </div>
+        </div>
+        <div
+          class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl flex flex-col gap-1">
+          <span>🔗 Merujuk ke <span class="text-indigo-400 font-mono font-semibold">sekolah.id_sekolah</span></span>
+          <span>🔗 <b>1:N</b> ke <span
+              class="text-amber-400 font-mono font-semibold">detail_kunjungan.id_anggota</span></span>
+        </div>
+      </div>
+
+      <!-- 5. BERITA ACARA -->
+      <div class="table-box p-0 cursor-pointer" id="t-ba" onclick="focusTable('ba')">
+        <div
+          class="bg-sky-600/30 border-b border-sky-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📜</span>
+            <span class="font-mono font-bold text-sky-300 text-sm">berita_acara</span>
+          </div>
+          <span class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded font-mono">Transaksi Kunjungan</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_ba</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-emerald-300">
+            <span>nomor_ba</span>
+            <span class="text-slate-400">VARCHAR(50) UK</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_sekolah</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_pustakawan</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>tgl_kunjungan ⚡</span>
+            <span class="text-slate-400">DATE (IDX)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>perwakilan_sekolah</span>
+            <span class="text-slate-400">VARCHAR(100)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>waktu</span>
+            <span class="text-slate-400">TIME s/d TIME</span>
+          </div>
+        </div>
+        <div
+          class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl flex flex-col gap-1">
+          <span>🔗 Merujuk ke <span class="text-indigo-400 font-mono font-semibold">sekolah</span> & <span
+              class="text-teal-400 font-mono font-semibold">pustakawan</span></span>
+          <span>🔗 <b>1:N</b> ke <span
+              class="text-amber-400 font-mono font-semibold">detail_kunjungan.id_ba</span></span>
+        </div>
+      </div>
+
+      <!-- 6. DETAIL KUNJUNGAN -->
+      <div class="table-box p-0 cursor-pointer" id="t-detail" onclick="focusTable('detail')">
+        <div
+          class="bg-amber-600/30 border-b border-amber-500/30 px-4 py-2.5 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📋</span>
+            <span class="font-mono font-bold text-amber-300 text-sm">detail_kunjungan</span>
+          </div>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono">Pivot Presensi</span>
+        </div>
+        <div class="p-3 text-xs divide-y divide-slate-700/60 font-mono">
+          <div class="py-1.5 flex justify-between text-amber-300 font-bold bg-amber-500/10 px-1 rounded">
+            <span>🔑 id_detail</span>
+            <span class="text-amber-400 font-normal">BIGINT (PK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_ba</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-sky-300 font-semibold bg-sky-500/10 px-1 rounded">
+            <span>🔗 id_anggota</span>
+            <span class="text-sky-400 font-normal">BIGINT (FK)</span>
+          </div>
+          <div class="py-1.5 flex justify-between text-slate-200">
+            <span>waktu_hadir</span>
+            <span class="text-slate-400">TIMESTAMP</span>
+          </div>
+          <div
+            class="py-2.5 mt-2 bg-emerald-950/40 rounded p-2 text-[11px] font-sans text-emerald-300 border border-emerald-500/30">
+            🛡️ <b>Constraint Integritas Aktif:</b><br>
+            <code class="text-emerald-200">UNIQUE(id_ba, id_anggota)</code><br>
+            Mencegah 1 siswa terinput ganda pada 1 kunjungan!
+          </div>
+        </div>
+        <div class="bg-slate-900/50 p-2.5 text-[11px] text-slate-400 border-t border-slate-700 rounded-b-xl">
+          <span>🔗 Merujuk ke <span class="text-sky-400 font-mono font-semibold">berita_acara.id_ba</span> & <span
+              class="text-emerald-400 font-mono font-semibold">anggota.id_anggota</span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Panel Penjelasan Relasi Terpilih -->
+    <div id="relation-detail" class="mt-6 p-4 rounded-xl bg-slate-800/90 border border-slate-700 text-xs">
+      <div class="font-bold text-slate-200 mb-1 flex items-center gap-2 text-sm">
+        <span>ℹ️</span> <span id="detail-title">Detail Relasi: Menampilkan Seluruh Tabel</span>
+      </div>
+      <p id="detail-desc" class="text-slate-400 leading-relaxed">
+        Klik kartu tabel di atas untuk fokus melihat relasi, constraint unik, dan indeks pencarian.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 2: AUDIT 5 KEKURANGAN & SOLUSI -->
+  <div id="tab-audit" class="max-w-7xl mx-auto hidden">
+    <div class="space-y-4">
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4">
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2 mb-2">
+          <span>1.</span> Masalah Duplikasi Siswa di Kunjungan yang Sama (Integritas Data Fatal)
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Kekurangan:</b> Sebelumnya, tabel <code class="text-sky-300">detail_kunjungan</code> belum memiliki
+          constraint unik. Jika form di-submit 2 kali atau scanner barcode membaca dua kali, 1 siswa akan terinput 2
+          kali di berita acara yang sama.<br>
+          <b class="text-emerald-400">Perbaikan:</b> Ditambahkan <code
+            class="text-emerald-300 font-mono">UNIQUE KEY uq_kunjungan_anggota (id_ba, id_anggota)</code>. Database akan
+          otomatis menolak duplikasi data siswa di kunjungan yang sama.
+        </p>
+      </div>
+
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4">
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2 mb-2">
+          <span>2.</span> Kaidah Berita Acara Pemerintahan Hanya 1 Pihak
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Kekurangan:</b> Berita Acara di instansi dinas pemerintah adalah dokumen serah terima kegiatan antar dua
+          belah pihak. Sebelumnya hanya ada data pustakawan saja.<br>
+          <b class="text-emerald-400">Perbaikan:</b> Ditambahkan kolom legalitas: <code
+            class="text-emerald-300 font-mono">nama_perwakilan_sekolah</code>, <code
+            class="text-emerald-300 font-mono">nip_perwakilan_sekolah</code>, <code
+            class="text-emerald-300 font-mono">waktu_mulai</code>, dan <code
+            class="text-emerald-300 font-mono">waktu_selesai</code>.
+        </p>
+      </div>
+
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4">
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2 mb-2">
+          <span>3.</span> Kolom Master Anggota Kurang untuk Laporan Tahunan
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Kekurangan:</b> Perpustakaan daerah wajib melaporkan demografi pembaca (pria/wanita), status keaktifan
+          siswa (apakah sudah lulus/pindah), dan nomor kartu anggota.<br>
+          <b class="text-emerald-400">Perbaikan:</b> Ditambahkan <code
+            class="text-emerald-300 font-mono">nomor_anggota (Unique)</code>, <code
+            class="text-emerald-300 font-mono">jenis_kelamin ENUM('L','P')</code>, dan <code
+            class="text-emerald-300 font-mono">status_anggota ENUM('aktif','lulus','pindah')</code>.
+        </p>
+      </div>
+
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4">
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2 mb-2">
+          <span>4.</span> Ketiadaan Indexing (Sesuai Rumusan Masalah BAB I: Lambat Mencari Data)
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Kekurangan:</b> Di BAB I skripsi ditegaskan bahwa pustakawan sering lambat mencari nama siswa dan
+          sekolah.<br>
+          <b class="text-emerald-400">Perbaikan:</b> Dibuat index eksplisit (<code
+            class="text-emerald-300 font-mono">INDEX idx_nama_anggota</code>, <code
+            class="text-emerald-300 font-mono">INDEX idx_nama_sekolah</code>, <code
+            class="text-emerald-300 font-mono">INDEX idx_tgl_kunjungan</code>) sehingga pencarian query SQL menggunakan
+          B-Tree yang sangat cepat (O(log n)).
+        </p>
+      </div>
+
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4">
+        <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2 mb-2">
+          <span>5.</span> Kebijakan Penghapusan Referential (`ON DELETE RESTRICT`)
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Kekurangan:</b> Jika operator tidak sengaja menghapus sekolah SDN 1 Gunung Tiga, seluruh riwayat berita
+          acara dan presensi tahunan bisa ikut terhapus.<br>
+          <b class="text-emerald-400">Perbaikan:</b> Foreign key ke master penting menggunakan <code
+            class="text-emerald-300 font-mono">ON DELETE RESTRICT</code>, sehingga sistem menolak penghapusan sekolah
+          jika sekolah tersebut sudah memiliki riwayat kunjungan.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: DDL SQL READY -->
+  <div id="tab-sql" class="max-w-7xl mx-auto hidden">
+    <div
+      class="bg-slate-900 rounded-xl border border-slate-700 p-4 font-mono text-xs text-sky-300 overflow-x-auto leading-relaxed shadow-inner">
+      <pre><code>-- LIHAT BERKAS schema.sql DI FOLDER PROJECT ANDA UNTUK KODE LENGKAP:
+-- d:\Basis Data Lanjut\project_uts\schema.sql
+
+-- 1. TABEL SEKOLAH
+CREATE TABLE sekolah (
+    id_sekolah BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    npsn VARCHAR(20) UNIQUE NULL,
+    nama_sekolah VARCHAR(100) NOT NULL,
+    nama_kepsek VARCHAR(100) NOT NULL,
+    alamat TEXT NOT NULL,
+    kecamatan VARCHAR(50) NOT NULL DEFAULT 'Lampung Timur',
+    kontak_sekolah VARCHAR(25) NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_nama_sekolah (nama_sekolah)
+);
+
+-- 2. TABEL PUSTAKAWAN
+CREATE TABLE pustakawan (
+    id_pustakawan BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nip VARCHAR(30) UNIQUE NOT NULL,
+    nama VARCHAR(100) NOT NULL,
+    jabatan VARCHAR(50) DEFAULT 'Petugas Layanan Keliling',
+    no_telp VARCHAR(20) NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_nama_pustakawan (nama)
+);
+
+-- 3. TABEL USERS (1:1 DENGAN PUSTAKAWAN)
+CREATE TABLE users (
+    id_user BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_pustakawan BIGINT UNSIGNED NULL UNIQUE,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'pustakawan') DEFAULT 'pustakawan',
+    status_aktif BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_users_pustakawan FOREIGN KEY (id_pustakawan) 
+        REFERENCES pustakawan(id_pustakawan) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- 4. TABEL ANGGOTA (SISWA)
+CREATE TABLE anggota (
+    id_anggota BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_sekolah BIGINT UNSIGNED NOT NULL,
+    nomor_anggota VARCHAR(30) UNIQUE NOT NULL,
+    nisn VARCHAR(20) NULL,
+    nama VARCHAR(100) NOT NULL,
+    jenis_kelamin ENUM('L', 'P') NOT NULL,
+    kelas VARCHAR(20) NOT NULL,
+    alamat TEXT NULL,
+    status_anggota ENUM('aktif', 'lulus', 'pindah') DEFAULT 'aktif',
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_anggota_sekolah FOREIGN KEY (id_sekolah) 
+        REFERENCES sekolah(id_sekolah) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_nama_anggota (nama),
+    INDEX idx_sekolah_anggota (id_sekolah)
+);
+
+-- 5. TABEL BERITA ACARA
+CREATE TABLE berita_acara (
+    id_ba BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nomor_ba VARCHAR(50) UNIQUE NOT NULL,
+    id_sekolah BIGINT UNSIGNED NOT NULL,
+    id_pustakawan BIGINT UNSIGNED NOT NULL,
+    tgl_kunjungan DATE NOT NULL,
+    waktu_mulai TIME NULL,
+    waktu_selesai TIME NULL,
+    nama_perwakilan_sekolah VARCHAR(100) NOT NULL,
+    nip_perwakilan_sekolah VARCHAR(30) NULL,
+    catatan TEXT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_ba_sekolah FOREIGN KEY (id_sekolah) 
+        REFERENCES sekolah(id_sekolah) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_ba_pustakawan FOREIGN KEY (id_pustakawan) 
+        REFERENCES pustakawan(id_pustakawan) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_tgl_kunjungan (tgl_kunjungan)
+);
+
+-- 6. TABEL DETAIL KUNJUNGAN
+CREATE TABLE detail_kunjungan (
+    id_detail BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_ba BIGINT UNSIGNED NOT NULL,
+    id_anggota BIGINT UNSIGNED NOT NULL,
+    waktu_hadir TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_detail_ba FOREIGN KEY (id_ba) 
+        REFERENCES berita_acara(id_ba) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_detail_anggota FOREIGN KEY (id_anggota) 
+        REFERENCES anggota(id_anggota) ON DELETE RESTRICT ON UPDATE CASCADE,
+    UNIQUE KEY uq_kunjungan_anggota (id_ba, id_anggota),
+    INDEX idx_detail_ba (id_ba),
+    INDEX idx_detail_anggota (id_anggota)
+);</code></pre>
+    </div>
+  </div>
+
+  <script>
+    const relInfo = {
+      'sekolah': {
+        title: 'Tabel: sekolah (PK: id_sekolah)',
+        desc: 'Master sekolah tujuan kunjungan di Lampung Timur. Memiliki npsn (Unique) dan indexed nama_sekolah untuk mempercepat pencarian data sekolah.'
+      },
+      'pustakawan': {
+        title: 'Tabel: pustakawan (PK: id_pustakawan)',
+        desc: 'Master petugas dinas. Memiliki nip (Unique) dan relasi 1:1 ke tabel users serta 1:N ke berita_acara.'
+      },
+      'users': {
+        title: 'Tabel: users (PK: id_user)',
+        desc: 'Akun autentikasi login terhubung ke id_pustakawan (Unique FK) dengan proteksi ON DELETE RESTRICT agar jejak audit akun tidak hilang.'
+      },
+      'anggota': {
+        title: 'Tabel: anggota (PK: id_anggota)',
+        desc: 'Master siswa dilengkapi nomor_anggota (Unique) untuk cetak kartu anggota, jenis_kelamin (L/P) untuk rekap statistik tahunan, dan indeks pencarian nama.'
+      },
+      'ba': {
+        title: 'Tabel: berita_acara (PK: id_ba)',
+        desc: 'Dokumen legal resmi 2 pihak: pihak pustakawan dinas dan pihak perwakilan sekolah (nama & NIP guru penerima), dilengkapi jam operasional layanan.'
+      },
+      'detail': {
+        title: 'Tabel: detail_kunjungan (PK: id_detail)',
+        desc: 'Presensi kehadiran siswa di mobil keliling. Dilindungi oleh UNIQUE KEY (id_ba, id_anggota) sehingga mustahil terjadi salah input siswa ganda.'
+      }
+    };
+
+    function focusTable(key) {
+      document.querySelectorAll('.table-box').forEach(el => el.classList.remove('highlighted'));
+      const activeEl = document.getElementById('t-' + key);
+      if (activeEl) {
+        activeEl.classList.add('highlighted');
+      }
+      if (relInfo[key]) {
+        document.getElementById('detail-title').innerText = relInfo[key].title;
+        document.getElementById('detail-desc').innerText = relInfo[key].desc;
+      }
+    }
+
+    function switchTab(tab) {
+      ['diagram', 'audit', 'sql'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('btn-' + t).className = 'px-3 py-1.5 rounded-lg font-medium transition text-slate-300 hover:text-white';
+      });
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+      document.getElementById('btn-' + tab).className = 'px-3 py-1.5 rounded-lg font-medium transition bg-sky-500 text-white shadow';
+    }
+  </script>
+</body>
+
+</html>
