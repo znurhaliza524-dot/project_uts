@@ -17,6 +17,19 @@ if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
         }
     }
 
+    // Copy SQLite database to /tmp if exists
+    $sqliteSource = __DIR__ . '/../database/database.sqlite';
+    $sqliteTarget = '/tmp/database.sqlite';
+    if (!file_exists($sqliteTarget) && file_exists($sqliteSource)) {
+        @copy($sqliteSource, $sqliteTarget);
+    }
+    if (file_exists($sqliteTarget) && (!isset($_ENV['DB_CONNECTION']) || $_ENV['DB_CONNECTION'] === 'sqlite')) {
+        $_ENV['DB_CONNECTION'] = 'sqlite';
+        $_ENV['DB_DATABASE'] = $sqliteTarget;
+        putenv("DB_CONNECTION=sqlite");
+        putenv("DB_DATABASE={$sqliteTarget}");
+    }
+
     $_ENV['APP_CONFIG_CACHE'] = '/tmp/bootstrap/cache/config.php';
     $_ENV['APP_ROUTES_CACHE'] = '/tmp/bootstrap/cache/routes.php';
     $_ENV['APP_SERVICES_CACHE'] = '/tmp/bootstrap/cache/services.php';
@@ -36,3 +49,4 @@ if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
 }
 
 $app->handleRequest(\Illuminate\Http\Request::capture());
+
